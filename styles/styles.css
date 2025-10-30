@@ -1,0 +1,29 @@
+.header_title {
+  background-color: transparent;
+  color: var(--background-text-color);
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.main_content {
+  background-image: url(../assets/background_image.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 100vh;
+  padding: 0.5rem;
+}
+
+.storyline {
+  color: var(--background-text-color);
+  display: flex;
+  flex-direction: column;
+  margin-left: 2rem;
+  margin-top: 0.5rem;
+}
+.instructions{
+  margin-left: 2rem;
+}
+
+
+
