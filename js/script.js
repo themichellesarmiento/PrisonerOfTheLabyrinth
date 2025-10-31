@@ -9,18 +9,21 @@
 
 let rooms = [
   ["#", "P", ".", "#", "."],
-  [".", "#", ".", ".", "E"],
-  [".", ".", "K", ".", "."],
+  [".", "#", ".", ".", "."],
+  [".", ".", "K", ".", "E"],
   [".", ".", "#", ".", "."],
-  ["#", ".", ".", ".", "G"]
+  ["G", ".", ".", ".", "#"]
 ];
 
 // TRACK the positions
-let exitRow = 1; exitCol = 4;
+let exitRow = 2; exitCol = 4;
 let keyRow = 2; keyCol = 2;
 let playerRow = 0, playerCol = 1;
-let ghostRow = 4, ghostCol = 4;
+let ghostRow = 4, ghostCol = 0;
 let hasKey = false;
+
+// VALID movements (array comparison)
+const validMovements = ["N", "E", "W", "S"];
 
 console.log('You awaken in a cold, dark labyrinth.Somewhere lies a key that unlocks your freedom. But beware.. a ghost hunts in the dark.');
 
@@ -30,8 +33,13 @@ while (true) {
 
   // DISPLAY the map
   console.log(`${playerName} finding the exit is your way to freedom`);
+
   for (let i = 0; i <= rooms.length - 1; i++) {
-    console.log(rooms[i].join(" "));
+    let row = "";
+    for (let j = 0; j < rooms[i].length; j++) {
+      row += rooms[i][j] + " ";
+    }
+    console.log(row);
   }
   console.log(`${playerName} has ${hasKey ? "✅ Gotten" : "❌ Not Yet Found"} the key 🔑.`);
 
@@ -59,6 +67,12 @@ while (true) {
     break;
   }
   let move = userInput.toUpperCase();
+
+  //CHECK if input is valide
+  if (!validMovements.includes(move)) {
+    console.log(`${playerName}, that is not a valid direction. Choose N, E, W, S`);
+    continue;
+  }
 
   let newPlayerRow = playerRow;
   let newPlayerCol = playerCol;
