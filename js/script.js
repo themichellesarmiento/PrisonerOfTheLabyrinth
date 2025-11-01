@@ -6,21 +6,27 @@
 // P : represents player and their position
 // G : represents the ghost and its position
 // E : exit 
+// K : key
+// C : freezing crystal 
 
 let rooms = [
   ["#", "P", ".", "#", "."],
+  [".", ".", ".", ".", "."],
+  [".", ".", "K", "C", "E"],
   [".", "#", ".", ".", "."],
-  [".", ".", "K", ".", "E"],
-  [".", ".", "#", ".", "."],
-  ["G", ".", ".", ".", "#"]
+  ["G", ".", "#", ".", "#"]
 ];
 
 // TRACK the positions
-let exitRow = 2; exitCol = 4;
-let keyRow = 2; keyCol = 2;
+let exitRow = 2, exitCol = 4;
+let keyRow = 2, keyCol = 2;
+let freezeCrystalRow = 2, freezeCrystalCol = 3
 let playerRow = 0, playerCol = 1;
 let ghostRow = 4, ghostCol = 0;
+
+// STATUS
 let hasKey = false;
+let skipGhostTurn = false; // NOTE: the freezing crystal will make the ghost lose a turn.
 
 // VALID movements (array comparison)
 const validMovements = ["N", "E", "W", "S"];
@@ -101,34 +107,44 @@ while (true) {
     console.log(`${playerName}, you found the key! 🔑`);
   }
 
+  // PLAYER picked up crystal
+  if (playerRow === freezeCrystalRow && playerCol === freezeCrystalCol) {
+    skipGhostTurn = true;
+    console.log(`${playerName}, you found a gem: The freezing crystal. Ghost will lose a turn. Use this chance wisely.`);
+    rooms[freezeCrystalRow][freezeCrystalCol] = "." // remove the crystal from the map
+  }
+
   // UPDATE player symbol in the map
   rooms[playerRow][playerCol] = "P"; //update player posution 
 
   // GHOST movement
-  let newGhostRow = ghostRow;
-  let newGhostCol = ghostCol;
+  if (skipGhostTurn) {
+    console.log('The ghost is frozen and cannot move in this turn. 👻🥶');
+    skipGhostTurn = false; // reset after skipping a turn 
+  } else {
+    rooms[ghostRow][ghostCol] = "."; // clear old ghost tile
+    let newGhostRow = ghostRow;
+    let newGhostCol = ghostCol;
 
-  // MECHANICS :
-  // if ghost is not in the same row as player, it moves vertically.
-  // if ghost is on the same row, it moves horizontally.
-  if (ghostRow < playerRow) newGhostRow++;
-  else if (ghostRow > playerRow) newGhostRow--;
-  else if (ghostCol < playerCol) newGhostCol++;
-  else if (ghostCol > playerCol) newGhostCol--;
+    // MECHANICS :
+    // if ghost is not in the same row as player, it moves vertically.
+    // if ghost is on the same row, it moves horizontally.
+    if (ghostRow < playerRow) newGhostRow++;
+    else if (ghostRow > playerRow) newGhostRow--;
+    else if (ghostCol < playerCol) newGhostCol++;
+    else if (ghostCol > playerCol) newGhostCol--;
 
-  // CHECK if ghost move is valid , avoid exit, wall
-  if (newGhostRow >= 0 && newGhostRow <= 4 &&
-    newGhostCol >= 0 && newGhostCol <= 4 &&
-    rooms[newGhostRow][newGhostCol] !== "#" &&
-    rooms[newGhostRow][newGhostCol] !== "E") {
-    rooms[ghostRow][ghostCol] = "."; // clear old post
-    ghostRow = newGhostRow; // apply the moves
-    ghostCol = newGhostCol;
+    // CHECK if ghost move is valid , avoid exit, wall
+    if (newGhostRow >= 0 && newGhostRow <= 4 &&
+      newGhostCol >= 0 && newGhostCol <= 4 &&
+      rooms[newGhostRow][newGhostCol] !== "#" &&
+      rooms[newGhostRow][newGhostCol] !== "E") {
+      ghostRow = newGhostRow;
+      ghostCol = newGhostCol;
+    }
   }
-
   rooms[ghostRow][ghostCol] = "G"; // update ghost position
 
-  // RESTORE exit and key after movements
   if (!hasKey) rooms[keyRow][keyCol] = "K";
   rooms[exitRow][exitCol] = "E";
 
