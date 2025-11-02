@@ -11,19 +11,51 @@
   background-repeat: no-repeat;
   background-size: cover;
   min-height: 100vh;
-  padding: 0.5rem;
+  padding: 2rem;
 }
 
 .storyline {
   color: var(--background-text-color);
   display: flex;
   flex-direction: column;
-  margin-left: 2rem;
   margin-top: 0.5rem;
 }
-.instructions{
+
+.instructions {
   margin-left: 2rem;
 }
 
+.btn {
+  /* THE order of this CSS properties matters */
+  color: #444;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.2rem;
+  cursor: pointer;
 
+  background-color: white;
+  background-color: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
 
+  padding: 0.7rem 1rem;
+  border-radius: 50rem;
+  box-shadow: 0 1.75rem 3.5rem rgba(0, 0, 0, 0.1);
+}
+
+@media screen and (min-width:769px) {
+  .main_content {
+    padding: 1rem;
+  }
+
+  .storyline {
+    margin-left: 2rem;
+  }
+
+  .btn {
+    font-size: 2rem;
+    width: 50%;
+  }
+}
